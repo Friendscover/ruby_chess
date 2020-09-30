@@ -9,6 +9,10 @@ class Board
     @board.each { |elements| p elements }
   end
 
+  def set_position(x_position, y_position, item)
+    @board[x_position][y_position] = item
+  end
+
   private
 
   def create_board

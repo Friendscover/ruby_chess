@@ -15,4 +15,10 @@ describe "creates a chess board" do
     chess_board = Board.new
     expect(chess_board.print_board).to be_a(Array)
   end
+
+  it "set a piece on position 0/0" do
+    chess_board = Board.new
+    chess_board.set_position(0, 0, "x")
+    expect(chess_board.board[0][0]).to eq("x")
+  end
 end
