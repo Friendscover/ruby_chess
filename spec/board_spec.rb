@@ -10,4 +10,9 @@ describe "creates a chess board" do
     chess_board = Board.new
     expect(chess_board.board.flatten.length).to eq(64)
   end
+
+  it "prints the board" do
+    chess_board = Board.new
+    expect(chess_board.print_board).to be_a(Array)
+  end
 end
