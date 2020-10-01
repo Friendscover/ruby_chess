@@ -1,4 +1,4 @@
-require "piece.rb"
+require 'piece'
 
 class Pawn < Piece
   def initialize(name)
@@ -6,6 +6,6 @@ class Pawn < Piece
   end
 
   def decide_color(name)
-    name.include?("black") ? "♟︎" : "♙"
+    name.include?('black') ? '♟︎' : '♙'
   end
 end

@@ -1,5 +1,5 @@
 class Board
-  attr_accessor :board 
+  attr_accessor :board
 
   def initialize
     @board = create_board
@@ -16,6 +16,6 @@ class Board
   private
 
   def create_board
-    Array.new(8) { Array.new(8, " ") }
+    Array.new(8) { Array.new(8, ' ') }
   end
 end

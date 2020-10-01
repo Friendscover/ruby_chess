@@ -1,4 +1,4 @@
-require "piece.rb"
+require 'piece'
 
 class Bishop < Piece
   def initialize(name)
@@ -6,6 +6,6 @@ class Bishop < Piece
   end
 
   def decide_color(name)
-    name.include?("black") ? "♝" : "♗"
+    name.include?('black') ? '♝' : '♗'
   end
 end
