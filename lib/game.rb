@@ -13,11 +13,21 @@
 # pawn => move one or two pos => two only on first move => can capture opponent
 #     if enemy pawn is in front of it one position left or right
 class Game
+  attr_accessor :current_player, :player1, :player2
+
   def initialize
     @chess_board = Board.new
+    assign_players
     create_start_position
     set_start_position
-    @chess_board.print_board
+    play_game
+  end
+
+  def play_game
+    # play until checkmate
+    play_turn
+    # check if won/check/checkamto/pawn switch
+    # switch player
   end
 
   def create_start_position
@@ -49,13 +59,45 @@ class Game
     front_row
   end
 
+  def assign_players
+    user_input = choose_player
+    assign_starting_player(user_input)
+    start_player_message
+  end
+
+  def choose_player
+    puts 'Player1, which pieces do you prefer? Choose <black> or <white>!'
+    user_input = gets.chomp
+    until user_input.include?('white') || user_input.include?('black')
+      puts 'That was a wrong argument. Try <black> or <white> again!'
+      user_input = gets.chomp
+    end
+    user_input
+  end
+
+  def assign_starting_player(user_input)
+    if user_input == 'white'
+      @player1 = 'white'
+      @player2 = 'black'
+      @current_player = @player1
+    else
+      @player1 = 'black'
+      @player2 = 'white'
+      @current_player = @player2
+    end
+  end
+
+  def start_player_message
+    puts "Player1 chooses #{@player1}. Player2 chooses #{player2}!"
+    puts "The Game starts with #{@current_player}"
+  end
+
   def play_turn
-    # print board
+    @chess_board.print_board
+    puts "#{@current_player}. Choose a Piece to move!"
     # get user position which piece to set
     # only allow players to set their color pieces
     # check if user positio is valid else get again
     # set position
-    # check if won/check/checkamto/pawn switch
-    # switch player
   end
 end
