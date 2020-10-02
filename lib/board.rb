@@ -6,7 +6,9 @@ class Board
   end
 
   def print_board
-    @board.each { |elements| p elements }
+    @board.each do |elements|
+      p elements.join(' | ')
+    end
   end
 
   def set_position(x_position, y_position, item)
