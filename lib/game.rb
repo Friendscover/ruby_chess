@@ -24,7 +24,7 @@ class Game
   end
 
   def play_game
-    # play until checkmate
+    # play until checkmate or type get help, rules
     play_turn
     # check if won/check/checkamto/pawn switch
     # switch player
@@ -40,10 +40,10 @@ class Game
 
   def set_start_position
     8.times do |i|
-      @chess_board.set_position(0, i, @black_back_row[i].icon)
-      @chess_board.set_position(1, i, @black_front_row[i].icon)
-      @chess_board.set_position(6, i, @white_front_row[i].icon)
-      @chess_board.set_position(7, i, @white_back_row[i].icon)
+      @chess_board.set_position(0, i, @black_back_row[i])
+      @chess_board.set_position(1, i, @black_front_row[i])
+      @chess_board.set_position(6, i, @white_front_row[i])
+      @chess_board.set_position(7, i, @white_back_row[i])
     end
   end
 
@@ -89,15 +89,48 @@ class Game
 
   def start_player_message
     puts "Player1 chooses #{@player1}. Player2 chooses #{player2}!"
-    puts "The Game starts with #{@current_player}"
+    puts "The Game starts with #{@current_player} \n"
   end
 
   def play_turn
     @chess_board.print_board
-    puts "#{@current_player}. Choose a Piece to move!"
-    # get user position which piece to set
-    # only allow players to set their color pieces
-    # check if user positio is valid else get again
-    # set position
+    puts "\n #{@current_player}. Choose a Piece to move! Type <help> for more info"
+    user_input = choose_piece_to_move
+    user_input = convert_user_input(user_input)
+    if valid_piece_selected?(user_input)
+      # true => set position and delete old
+      p 'inside'
+    else
+      p 'try again'
+      # get again
+      # only allow players to set their color piecese
+    end
+  end
+
+  def choose_piece_to_move
+    user_input = gets.chomp
+    until user_input.match(/[a-h][1-8]/) && user_input.length == 2
+      if user_input == 'help'
+        puts 'To pick a piece on the board type the row <a-h> and column <1-8>!'
+        puts 'For example. Type <a1> to move the piece on this position'
+      else
+        puts 'Thats not quit right. Try again. Type <help> for more info!'
+      end
+      user_input = gets.chomp
+    end
+    user_input
+  end
+
+  def convert_user_input(input)
+    alphabet_to_array = %w[a b c d e f g h]
+    input = input.split(//)
+    column = alphabet_to_array.index(input[0])
+    row = input[1].to_i - 1
+    [column, row]
+  end
+
+  def valid_piece_selected?(position)
+    piece = @chess_board.board[position[1]][position[0]]
+    piece.name == current_player
   end
 end
