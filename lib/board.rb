@@ -11,7 +11,11 @@ class Board
     @board.each_with_index do |elements, index|
       print "#{@column[index]} |"
       elements.each do |element|
-        print " #{element} |"
+        if element == ' '
+          print "#{element}  |"
+        else
+          print " #{element.icon} |"
+        end
       end
       puts ''
     end
