@@ -89,15 +89,15 @@ class Game
 
   def start_player_message
     puts "Player1 chooses #{@player1}. Player2 chooses #{player2}!"
-    puts "The Game starts with #{@current_player}"
+    puts "The Game starts with #{@current_player} \n"
   end
 
   def play_turn
     @chess_board.print_board
-    puts "#{@current_player}. Choose a Piece to move!"
+    puts "\n #{@current_player}. Choose a Piece to move!"
     # get user position which piece to set
-    # only allow players to set their color pieces
     # check if user positio is valid else get again
+    # only allow players to set their color pieces
     # set position
   end
 end

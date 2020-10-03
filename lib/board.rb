@@ -3,12 +3,20 @@ class Board
 
   def initialize
     @board = create_board
+    @column = (1..8).to_a
+    @row = ('a'..'h').to_a
   end
 
   def print_board
-    @board.each do |elements|
-      p elements.join(' | ')
+    @board.each_with_index do |elements, index|
+      print "#{@column[index]} |"
+      elements.each do |element|
+        print " #{element} |"
+      end
+      puts ''
     end
+    print ' '
+    @row.each { |number| print "   #{number}" }
   end
 
   def set_position(x_position, y_position, item)
