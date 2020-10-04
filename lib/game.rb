@@ -24,9 +24,10 @@ class Game
   end
 
   def play_game
-    # play until checkmate or type get help, rules
-    play_turn
-    play_turn
+    loop do
+      play_turn
+      switch_current_player
+    end
     # check if won/check/checkamto/pawn switch
     # switch player
   end
@@ -98,14 +99,12 @@ class Game
     puts "\n \n #{@current_player}. Choose a Piece to move! Type <help> for more info"
     user_input = choose_piece_to_move
     user_input = convert_user_input(user_input)
-    if valid_piece_selected?(user_input)
-      assign_new_position(user_input)
-      p 'inside'
-    else
-      p 'try again'
-      # get again
-      # only allow players to set their color piecese
+    until valid_piece_selected?(user_input)
+      puts "Thats no a valid piece. Try again"
+      user_input = choose_piece_to_move
+      user_input = convert_user_input(user_input)
     end
+    assign_new_position(user_input)
   end
 
   def choose_piece_to_move
@@ -139,11 +138,15 @@ class Game
 
   def assign_new_position(current_position)
     current_piece = @chess_board.board[current_position[1]][current_position[0]]
-    puts "Please choose a new Position for your Piece!"
+    puts 'Please choose a new Position for your Piece!'
     puts "Selected Piece: #{current_piece.icon} \n"
     new_position = choose_piece_to_move
     new_position = convert_user_input(new_position)
     @chess_board.set_position(new_position[1], new_position[0], current_piece)
     @chess_board.set_position(current_position[1], current_position[0], ' ')
+  end
+
+  def switch_current_player
+    @current_player == @player1 ? @current_player = @player2 : @current_player = @player1
   end
 end
