@@ -26,6 +26,7 @@ class Game
   def play_game
     # play until checkmate or type get help, rules
     play_turn
+    play_turn
     # check if won/check/checkamto/pawn switch
     # switch player
   end
@@ -89,16 +90,16 @@ class Game
 
   def start_player_message
     puts "Player1 chooses #{@player1}. Player2 chooses #{player2}!"
-    puts "The Game starts with #{@current_player} \n"
+    puts "The Game starts with #{@current_player} \n \n"
   end
 
   def play_turn
     @chess_board.print_board
-    puts "\n #{@current_player}. Choose a Piece to move! Type <help> for more info"
+    puts "\n \n #{@current_player}. Choose a Piece to move! Type <help> for more info"
     user_input = choose_piece_to_move
     user_input = convert_user_input(user_input)
     if valid_piece_selected?(user_input)
-      # true => set position and delete old
+      assign_new_position(user_input)
       p 'inside'
     else
       p 'try again'
@@ -111,8 +112,8 @@ class Game
     user_input = gets.chomp
     until user_input.match(/[a-h][1-8]/) && user_input.length == 2
       if user_input == 'help'
-        puts 'To pick a piece on the board type the row <a-h> and column <1-8>!'
-        puts 'For example. Type <a1> to move the piece on this position'
+        puts 'To pick a position on the board type the row <a-h> and column <1-8>!'
+        puts 'For example. Type <a1> to choose the piece on this position!'
       else
         puts 'Thats not quit right. Try again. Type <help> for more info!'
       end
@@ -131,6 +132,18 @@ class Game
 
   def valid_piece_selected?(position)
     piece = @chess_board.board[position[1]][position[0]]
-    piece.name == current_player
+    # does not raise error for string.name if piece is not a piece
+    # does not check the second half of the condition if first half is false
+    piece != ' ' && piece.name == current_player
+  end
+
+  def assign_new_position(current_position)
+    current_piece = @chess_board.board[current_position[1]][current_position[0]]
+    puts "Please choose a new Position for your Piece!"
+    puts "Selected Piece: #{current_piece.icon} \n"
+    new_position = choose_piece_to_move
+    new_position = convert_user_input(new_position)
+    @chess_board.set_position(new_position[1], new_position[0], current_piece)
+    @chess_board.set_position(current_position[1], current_position[0], ' ')
   end
 end

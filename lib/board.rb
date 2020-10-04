@@ -23,8 +23,8 @@ class Board
     @row.each { |number| print "   #{number}" }
   end
 
-  def set_position(x_position, y_position, item)
-    @board[x_position][y_position] = item
+  def set_position(row, column, item)
+    @board[row][column] = item
   end
 
   private
