@@ -25,11 +25,11 @@ class Game
 
   def play_game
     loop do
+      @chess_board.print_board
       play_turn
       switch_current_player
     end
     # check if won/check/checkamto/pawn switch
-    # switch player
   end
 
   def create_start_position
@@ -95,19 +95,18 @@ class Game
   end
 
   def play_turn
-    @chess_board.print_board
-    puts "\n \n #{@current_player}. Choose a Piece to move! Type <help> for more info"
-    user_input = choose_piece_to_move
+    puts "\n \n#{@current_player}. Choose a Piece to move! Type <help> for more info"
+    user_input = choose_position
     user_input = convert_user_input(user_input)
     until valid_piece_selected?(user_input)
-      puts "Thats no a valid piece. Try again"
-      user_input = choose_piece_to_move
+      puts 'Thats no a valid piece. Try again'
+      user_input = choose_position
       user_input = convert_user_input(user_input)
     end
     assign_new_position(user_input)
   end
 
-  def choose_piece_to_move
+  def choose_position
     user_input = gets.chomp
     until user_input.match(/[a-h][1-8]/) && user_input.length == 2
       if user_input == 'help'
@@ -140,13 +139,23 @@ class Game
     current_piece = @chess_board.board[current_position[1]][current_position[0]]
     puts 'Please choose a new Position for your Piece!'
     puts "Selected Piece: #{current_piece.icon} \n"
-    new_position = choose_piece_to_move
-    new_position = convert_user_input(new_position)
+    # check if new position is valid move? set : get position again
+    new_position = check_new_position(current_piece, current_position)
     @chess_board.set_position(new_position[1], new_position[0], current_piece)
     @chess_board.set_position(current_position[1], current_position[0], ' ')
   end
 
   def switch_current_player
-    @current_player == @player1 ? @current_player = @player2 : @current_player = @player1
+    @current_player = @current_player == @player1 ? @player2 : @player1
+  end
+
+  def check_new_position(piece, position)
+    loop do
+      new_position = choose_position
+      new_position = convert_user_input(new_position)
+      possible_moves = piece.generate_moves(position)
+      p possible_moves
+      return new_position if possible_moves.include?(new_position)
+    end
   end
 end
