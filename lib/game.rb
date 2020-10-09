@@ -157,7 +157,7 @@ class Game
       new_position = choose_position
       new_position = convert_user_input(new_position)
       possible_moves = piece.generate_moves(position)
-
+      p possible_moves
       # adds a check for positions that are occupied. e.g. no jump over pieces
       return new_position if possible_moves.include?(new_position)
     end
