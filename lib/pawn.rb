@@ -13,7 +13,7 @@ class Pawn < Piece
     row = current_position[0]
     column = current_position[1]
     moves = []
-
+    
     moves << if name.include?('white')
                [row, column - 1]
              else

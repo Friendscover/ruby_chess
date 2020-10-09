@@ -98,6 +98,7 @@ class Game
     puts "\n \n#{@current_player}. Choose a Piece to move! Type <help> for more info"
     user_input = choose_position
     user_input = convert_user_input(user_input)
+
     until valid_piece_selected?(user_input)
       puts 'Thats no a valid piece. Try again'
       user_input = choose_position
@@ -123,6 +124,7 @@ class Game
   def convert_user_input(input)
     alphabet_to_array = %w[a b c d e f g h]
     input = input.split(//)
+
     column = alphabet_to_array.index(input[0])
     row = input[1].to_i - 1
     [column, row]
@@ -141,8 +143,9 @@ class Game
     puts "Selected Piece: #{current_piece.icon} \n"
     # check if new position is valid move? set : get position again
     new_position = check_new_position(current_piece, current_position)
-    @chess_board.set_position(new_position[1], new_position[0], current_piece)
+
     @chess_board.set_position(current_position[1], current_position[0], ' ')
+    @chess_board.set_position(new_position[1], new_position[0], current_piece)
   end
 
   def switch_current_player
@@ -154,7 +157,8 @@ class Game
       new_position = choose_position
       new_position = convert_user_input(new_position)
       possible_moves = piece.generate_moves(position)
-      p possible_moves
+
+      # adds a check for positions that are occupied. e.g. no jump over pieces
       return new_position if possible_moves.include?(new_position)
     end
   end
