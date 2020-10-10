@@ -109,6 +109,7 @@ class Game
 
   def choose_position
     user_input = gets.chomp
+
     until user_input.match(/[a-h][1-8]/) && user_input.length == 2
       if user_input == 'help'
         puts 'To pick a position on the board type the row <a-h> and column <1-8>!'
@@ -118,6 +119,7 @@ class Game
       end
       user_input = gets.chomp
     end
+
     user_input
   end
 
