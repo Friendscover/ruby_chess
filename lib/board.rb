@@ -3,7 +3,7 @@ class Board
 
   def initialize
     @board = create_board
-    @column = (1..8).to_a
+    @column = (1..8).to_a.reverse!
     @row = ('a'..'h').to_a
   end
 

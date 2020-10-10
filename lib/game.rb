@@ -125,10 +125,11 @@ class Game
 
   def convert_user_input(input)
     alphabet_to_array = %w[a b c d e f g h]
+    number_array = [7, 6, 5, 4, 3, 2, 1, 0]
     input = input.split(//)
 
     column = alphabet_to_array.index(input[0])
-    row = input[1].to_i - 1
+    row = number_array.index(input[1].to_i - 1)
     [column, row]
   end
 
