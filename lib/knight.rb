@@ -12,12 +12,14 @@ class Knight < Piece
   def generate_moves(current_position)
     moves = []
 
-    moves = generate_positive_moves(current_position[0], current_position[1], moves)
+    moves << generate_positive_moves(current_position[0], current_position[1])
 
-    generate_negative_moves(current_position[0], current_position[1], moves)
+    moves << generate_negative_moves(current_position[0], current_position[1])
   end
 
-  def generate_positive_moves(row, column, moves)
+  def generate_positive_moves(row, column)
+    moves = []
+
     moves << [row + 2, column + 1]
     moves << [row + 2, column - 1]
     moves << [row - 2, column + 1]
@@ -26,7 +28,9 @@ class Knight < Piece
     moves
   end
 
-  def generate_negative_moves(row, column, moves)
+  def generate_negative_moves(row, column)
+    moves = []
+
     moves << [row + 1, column + 2]
     moves << [row + 1, column - 2]
     moves << [row - 1, column + 2]

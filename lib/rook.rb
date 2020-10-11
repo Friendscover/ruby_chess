@@ -12,38 +12,58 @@ class Rook < Piece
   def generate_moves(current_position)
     moves = []
 
-    moves = generate_horizontal(current_position[0], current_position[1], moves)
+    moves << generate_horizontal_positive(current_position[0], current_position[1])
 
-    generate_vertical(current_position[0], current_position[1], moves)
+    moves << generate_horizontal_negative(current_position[0], current_position[1])
+
+    moves << generate_vertical_positive(current_position[0], current_position[1])
+
+    moves << generate_vertical_negative(current_position[0], current_position[1])
   end
 
-  def generate_horizontal(row, column, moves)
+  def generate_horizontal_positive(row, column)
+    moves = []
     i = 1
+
     until (row + i) > 7
       moves << [row + i, column]
       i += 1
     end
 
-    j = 1
-    until (row - j).negative?
-      moves << [row - j, column]
-      j += 1
+    moves
+  end
+
+  def generate_horizontal_negative(row, column)
+    moves = []
+    i = 1
+
+    until (row - i).negative?
+      moves << [row - i, column]
+      i += 1
     end
 
     moves
   end
 
-  def generate_vertical(row, column, moves)
+  def generate_vertical_positive(row, column)
+    moves = []
     i = 1
+
     until (column + i) > 7
       moves << [row, column + i]
       i += 1
     end
 
-    j = 1
-    until (column - j).negative?
-      moves << [row, column - j]
-      j += 1
+    moves
+  end
+
+  def generate_vertical_negative(row, column)
+    moves = []
+    i = 1
+
+    until (column - i).negative?
+      moves << [row, column - i]
+      i += 1
     end
 
     moves

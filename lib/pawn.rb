@@ -10,8 +10,12 @@ class Pawn < Piece
   end
 
   def generate_moves(current_position)
-    row = current_position[0]
-    column = current_position[1]
+    moves = []
+
+    moves << generate_vertical_positive(current_position[0], current_position[1])
+  end
+
+  def generate_vertical_positive(row, column)
     moves = []
 
     moves << if name.include?('white')
@@ -19,6 +23,7 @@ class Pawn < Piece
              else
                [row, column + 1]
              end
+
     moves
   end
 end

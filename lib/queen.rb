@@ -19,69 +19,95 @@ class Queen < Piece
 
   def generate_bishop(current_position, moves)
     # diagonal positive generation
-    moves = generate_positive_positive(current_position[0], current_position[1], moves)
+    moves << generate_positive_positive(current_position[0], current_position[1])
 
     # diagonal negative generation
-    moves = generate_negative_negative(current_position[0], current_position[1], moves)
+    moves << generate_negative_negative(current_position[0], current_position[1])
 
     # diagonal neg/pos generation
-    moves = generate_negative_positive(current_position[0], current_position[1], moves)
+    moves << generate_negative_positive(current_position[0], current_position[1])
 
     # diagonal pos/neg
-    moves = generate_positive_negative(current_position[0], current_position[1], moves)
+    moves << generate_positive_negative(current_position[0], current_position[1])
 
-    moves.uniq!
+    moves
   end
 
   def generate_rook(current_position, moves)
-    moves = generate_vertical(current_position[0], current_position[1], moves)
+    moves << generate_horizontal_positive(current_position[0], current_position[1])
 
-    generate_horizontal(current_position[0], current_position[1], moves)
+    moves << generate_horizontal_negative(current_position[0], current_position[1])
+
+    moves << generate_vertical_positive(current_position[0], current_position[1])
+
+    moves << generate_vertical_negative(current_position[0], current_position[1])
+
+    moves
   end
 
-  def generate_horizontal(row, column, moves)
+  def generate_horizontal_positive(row, column)
+    moves = []
     i = 1
+
     until (row + i) > 7
       moves << [row + i, column]
       i += 1
     end
 
-    j = 1
-    until (row - j).negative?
-      moves << [row - j, column]
-      j += 1
+    moves
+  end
+
+  def generate_horizontal_negative(row, column)
+    moves = []
+    i = 1
+
+    until (row - i).negative?
+      moves << [row - i, column]
+      i += 1
     end
 
     moves
   end
 
-  def generate_vertical(row, column, moves)
+  def generate_vertical_positive(row, column)
+    moves = []
     i = 1
+
     until (column + i) > 7
       moves << [row, column + i]
       i += 1
     end
 
-    j = 1
-    until (column - j).negative?
-      moves << [row, column - j]
-      j += 1
+    moves
+  end
+
+  def generate_vertical_negative(row, column)
+    moves = []
+    i = 1
+
+    until (column - i).negative?
+      moves << [row, column - i]
+      i += 1
     end
 
     moves
   end
 
-  def generate_positive_positive(row, column, moves)
+  def generate_positive_positive(row, column)
+    moves = []
+
     until row >= 8 || column >= 8
+      moves << [row, column]
       row += 1
       column += 1
-      moves << [row, column]
     end
 
     moves
   end
 
-  def generate_negative_negative(row, column, moves)
+  def generate_negative_negative(row, column)
+    moves = []
+
     until row.negative? || column.negative?
       moves << [row, column]
       row -= 1
@@ -91,7 +117,9 @@ class Queen < Piece
     moves
   end
 
-  def generate_negative_positive(row, column, moves)
+  def generate_negative_positive(row, column)
+    moves = []
+
     until row.negative? || column >= 8
       moves << [row, column]
       row -= 1
@@ -101,7 +129,9 @@ class Queen < Piece
     moves
   end
 
-  def generate_positive_negative(row, column, moves)
+  def generate_positive_negative(row, column)
+    moves = []
+
     until row >= 8 || column.negative?
       moves << [row, column]
       row += 1

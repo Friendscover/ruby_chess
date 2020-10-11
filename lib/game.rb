@@ -162,7 +162,9 @@ class Game
       possible_moves = piece.generate_moves(position)
       p possible_moves
       # adds a check for positions that are occupied. e.g. no jump over pieces
-      return new_position if possible_moves.include?(new_position)
+      possible_moves.each do |array|
+        return new_position if array.include?(new_position)
+      end
     end
   end
 end

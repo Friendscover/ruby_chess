@@ -13,21 +13,23 @@ class Bishop < Piece
     moves = []
 
     # diagonal positive generation
-    moves = generate_positive_positive(current_position[0], current_position[1], moves)
+    moves << generate_positive_positive(current_position[0], current_position[1])
 
     # diagonal negative generation
-    moves = generate_negative_negative(current_position[0], current_position[1], moves)
+    moves << generate_negative_negative(current_position[0], current_position[1])
 
     # diagonal neg/pos generation
-    moves = generate_negative_positive(current_position[0], current_position[1], moves)
+    moves << generate_negative_positive(current_position[0], current_position[1])
 
     # diagonal pos/neg
-    moves = generate_positive_negative(current_position[0], current_position[1], moves)
+    moves << generate_positive_negative(current_position[0], current_position[1])
 
-    moves.uniq!
+    moves
   end
 
-  def generate_positive_positive(row, column, moves)
+  def generate_positive_positive(row, column)
+    moves = []
+
     until row >= 8 || column >= 8
       row += 1
       column += 1
@@ -37,7 +39,9 @@ class Bishop < Piece
     moves
   end
 
-  def generate_negative_negative(row, column, moves)
+  def generate_negative_negative(row, column)
+    moves = []
+
     until row.negative? || column.negative?
       moves << [row, column]
       row -= 1
@@ -47,7 +51,9 @@ class Bishop < Piece
     moves
   end
 
-  def generate_negative_positive(row, column, moves)
+  def generate_negative_positive(row, column)
+    moves = []
+
     until row.negative? || column >= 8
       moves << [row, column]
       row -= 1
@@ -57,7 +63,9 @@ class Bishop < Piece
     moves
   end
 
-  def generate_positive_negative(row, column, moves)
+  def generate_positive_negative(row, column)
+    moves = []
+
     until row >= 8 || column.negative?
       moves << [row, column]
       row += 1
