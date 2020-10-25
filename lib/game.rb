@@ -159,12 +159,34 @@ class Game
     loop do
       new_position = choose_position
       new_position = convert_user_input(new_position)
+
       possible_moves = piece.generate_moves(position)
-      p possible_moves
-      # adds a check for positions that are occupied. e.g. no jump over pieces
-      possible_moves.each do |array|
-        return new_position if array.include?(new_position)
+
+      possible_moves = remove_occupied_position(possible_moves)
+
+      return new_position if possible_moves.include?(new_position)
+    end
+  end
+
+  def remove_occupied_position(moves)
+    valid_moves = []
+
+    moves.each do |row|
+      next if row.empty?
+
+      i = 0
+      temp = ' '
+
+      until temp != ' ' || i >= row.length
+        valid_moves << row[i]
+        temp = find_item_on_position(row[i])
+        i += 1
       end
     end
+    valid_moves
+  end
+
+  def find_item_on_position(position)
+    @chess_board.board[position[1]][position[0]]
   end
 end
