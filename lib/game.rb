@@ -142,9 +142,10 @@ class Game
 
   def assign_new_position(current_position)
     current_piece = @chess_board.board[current_position[1]][current_position[0]]
+
     puts 'Please choose a new Position for your Piece!'
     puts "Selected Piece: #{current_piece.icon} \n"
-    # check if new position is valid move? set : get position again
+
     new_position = check_new_position(current_piece, current_position)
 
     @chess_board.set_position(current_position[1], current_position[0], ' ')
@@ -162,7 +163,9 @@ class Game
 
       possible_moves = piece.generate_moves(position)
 
-      possible_moves = remove_occupied_position(possible_moves)
+      unless piece.is_a?(Knight)
+        possible_moves = remove_occupied_position(possible_moves)
+      end
 
       return new_position if possible_moves.include?(new_position)
     end
