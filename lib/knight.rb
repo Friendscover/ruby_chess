@@ -14,7 +14,7 @@ class Knight < Piece
 
     moves = generate_positive_moves(current_position[0], current_position[1], moves)
 
-    moves = generate_negative_moves(current_position[0], current_position[1], moves)
+    generate_negative_moves(current_position[0], current_position[1], moves)
   end
 
   def generate_positive_moves(row, column, moves)

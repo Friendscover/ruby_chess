@@ -28,6 +28,7 @@ class Game
       @chess_board.print_board
       play_turn
       switch_current_player
+      break if check_mate
     end
     # check if won/check/checkamto/pawn switch
   end
@@ -182,14 +183,26 @@ class Game
 
       until temp != ' ' || i >= row.length
         valid_moves << row[i]
-        temp = find_item_on_position(row[i])
+        temp = @chess_board.get_position(row[i][1], row[i][0])
         i += 1
       end
     end
     valid_moves
   end
 
-  def find_item_on_position(position)
-    @chess_board.board[position[1]][position[0]]
+  def check_mate
+    #find kign
+    king_position = @chess_board.board.each do |array|
+      array.each do |element|
+          if element.is_a?(King) && element.name == current_player
+            p element
+          end
+          # .name == current_player && element.icon == "♞" || element.icon == "♘" unless element == ' '
+        end
+      end
+    #generate moves of king
+    #generate moves of enemy pieces
+    #declare check if enemey moves on king moves || king position
+    false
   end
 end
