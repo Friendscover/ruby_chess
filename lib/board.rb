@@ -28,7 +28,7 @@ class Board
   end
 
   def get_position(row, column)
-    @board[row, column]
+    @board[row][column]
   end
 
   private

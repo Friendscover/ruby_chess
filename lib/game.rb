@@ -27,8 +27,9 @@ class Game
     loop do
       @chess_board.print_board
       play_turn
-      switch_current_player
       break if check_mate
+
+      switch_current_player
     end
     # check if won/check/checkamto/pawn switch
   end
@@ -164,9 +165,7 @@ class Game
 
       possible_moves = piece.generate_moves(position)
 
-      unless piece.is_a?(Knight)
-        possible_moves = remove_occupied_position(possible_moves)
-      end
+      possible_moves = remove_occupied_position(possible_moves) unless piece.is_a?(Knight)
 
       return new_position if possible_moves.include?(new_position)
     end
@@ -191,18 +190,19 @@ class Game
   end
 
   def check_mate
-    #find kign
-    king_position = @chess_board.board.each do |array|
-      array.each do |element|
-          if element.is_a?(King) && element.name == current_player
-            p element
-          end
-          # .name == current_player && element.icon == "♞" || element.icon == "♘" unless element == ' '
-        end
-      end
-    #generate moves of king
-    #generate moves of enemy pieces
-    #declare check if enemey moves on king moves || king position
+    king_position = find_king
+    p king_position
+    # p item =  @chess_board.get_position(king_position[0], king_position[1])
+    # generate moves of enemy pieces
+    # declare check if enemey moves on king moves || king position
     false
+  end
+
+  def find_king
+    @chess_board.board.each_with_index do |array, array_index|
+      array.each_with_index do |element, element_index|
+        return [array_index, element_index] if element.is_a?(King) && element.name == current_player
+      end
+    end
   end
 end
