@@ -192,14 +192,21 @@ class Game
   def check_mate
     king_position = find_piece(King, current_player)
     p king_position
-    # check if right pieces is selected
-    p @chess_board.get_position(king_position[0][0], king_position[0][1])
     
-    # generate moves of enemy pieces
+    # find positions of enemy pieces => needs to switch player
     enemy = current_player == 'black' ? 'white' : 'black'
     enemy_positions = find_piece(Piece, enemy)
+    # generation to later compare with king postion
+    enemy_moves = generate_enemy_moves(enemy_positions)    
 
-    p enemy_positions
+    # valid_enemy_moves = []
+    p enemy_moves
+
+    #valid_enemy_moves = remove_occupied_position(enemy_moves)
+
+    #p valid_enemy_moves
+    # if enemy_positions.include?(king_position)
+      # p "Check!"
     #possible_moves = piece.generate_moves(position)
     # declare check if enemey moves on king moves || king position
     false
@@ -207,11 +214,27 @@ class Game
 
   def find_piece(piece, player)
     positions = []
+
     @chess_board.board.each_with_index do |array, array_index|
       array.each_with_index do |element, element_index|
         positions << [array_index, element_index] if element.is_a?(piece) && element.name == player
       end
     end
     positions
+  end
+
+  def generate_enemy_moves(enemy_positions)
+    moves = []
+
+    enemy_positions.each do |position|
+      piece = @chess_board.get_position(position[0], position[1])
+      move = piece.generate_moves(position)
+      move.flatten!(1) 
+      p move
+      move = remove_occupied_position(move) unless piece.is_a?(Knight)
+      moves << move
+    end
+
+    moves
   end
 end
