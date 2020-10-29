@@ -129,7 +129,7 @@ class Game
     alphabet_to_array = %w[a b c d e f g h]
     number_array = [7, 6, 5, 4, 3, 2, 1, 0]
     input = input.split(//)
-
+    p input
     column = alphabet_to_array.index(input[0])
     row = number_array.index(input[1].to_i - 1)
     [row, column]
@@ -143,7 +143,7 @@ class Game
   end
 
   def assign_new_position(current_position)
-    current_piece = @chess_board.board[current_position[1]][current_position[0]]
+    current_piece = @chess_board.board[current_position[0]][current_position[1]]
 
     puts 'Please choose a new Position for your Piece!'
     puts "Selected Piece: #{current_piece.icon} \n"
@@ -191,16 +191,19 @@ class Game
 
   def check_mate
     king_position = find_piece(King, current_player)
-    p king_position
     
     # find positions of enemy pieces => needs to switch player
     enemy = current_player == 'black' ? 'white' : 'black'
     enemy_positions = find_piece(Piece, enemy)
     # generation to later compare with king postion
-    p enemy_positions
-    p enemy_moves = generate_enemy_moves(enemy_positions)    
+    enemy_moves = generate_enemy_moves(enemy_positions)   
 
-    # valid_enemy_moves = []
+    enemy_moves.each do |move|
+      if move.include?(king_position)
+        puts "Check!"
+        return true
+      end
+    end
     false
   end
 
