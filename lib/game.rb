@@ -132,11 +132,11 @@ class Game
 
     column = alphabet_to_array.index(input[0])
     row = number_array.index(input[1].to_i - 1)
-    [column, row]
+    [row, column]
   end
 
   def valid_piece_selected?(position)
-    piece = @chess_board.board[position[1]][position[0]]
+    piece = @chess_board.board[position[0]][position[1]]
     # does not raise error for string.name if piece is not a piece
     # does not check the second half of the condition if first half is false
     piece != ' ' && piece.name == current_player
@@ -150,8 +150,8 @@ class Game
 
     new_position = check_new_position(current_piece, current_position)
 
-    @chess_board.set_position(current_position[1], current_position[0], ' ')
-    @chess_board.set_position(new_position[1], new_position[0], current_piece)
+    @chess_board.set_position(current_position[0], current_position[1], ' ')
+    @chess_board.set_position(new_position[0], new_position[1], current_piece)
   end
 
   def switch_current_player
@@ -182,7 +182,7 @@ class Game
 
       until temp != ' ' || i >= row.length
         valid_moves << row[i]
-        temp = @chess_board.get_position(row[i][1], row[i][0])
+        temp = @chess_board.get_position(row[i][0], row[i][1])
         i += 1
       end
     end
@@ -197,18 +197,10 @@ class Game
     enemy = current_player == 'black' ? 'white' : 'black'
     enemy_positions = find_piece(Piece, enemy)
     # generation to later compare with king postion
-    enemy_moves = generate_enemy_moves(enemy_positions)    
+    p enemy_positions
+    p enemy_moves = generate_enemy_moves(enemy_positions)    
 
     # valid_enemy_moves = []
-    p enemy_moves
-
-    #valid_enemy_moves = remove_occupied_position(enemy_moves)
-
-    #p valid_enemy_moves
-    # if enemy_positions.include?(king_position)
-      # p "Check!"
-    #possible_moves = piece.generate_moves(position)
-    # declare check if enemey moves on king moves || king position
     false
   end
 
@@ -224,17 +216,14 @@ class Game
   end
 
   def generate_enemy_moves(enemy_positions)
-    moves = []
+    valid_moves = []
 
     enemy_positions.each do |position|
       piece = @chess_board.get_position(position[0], position[1])
       move = piece.generate_moves(position)
-      move.flatten!(1) 
-      p move
       move = remove_occupied_position(move) unless piece.is_a?(Knight)
-      moves << move
+      valid_moves << move
     end
-
-    moves
+    valid_moves
   end
 end
