@@ -31,9 +31,9 @@ class Bishop < Piece
     moves = []
 
     until row >= 8 || column >= 8
+      moves << [row, column]
       row += 1
       column += 1
-      moves << [row, column]
     end
 
     moves
