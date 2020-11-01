@@ -95,11 +95,11 @@ class Queen < Piece
 
   def generate_positive_positive(row, column)
     moves = []
+    i = 1
 
-    until row >= 8 || column >= 8
-      moves << [row, column]
-      row += 1
-      column += 1
+    until (row + i) > 7 || (column + i) > 7
+      moves << [row + i, column + i]
+      i += 1
     end
 
     moves
@@ -107,11 +107,11 @@ class Queen < Piece
 
   def generate_negative_negative(row, column)
     moves = []
+    i = 1
 
-    until row.negative? || column.negative?
-      moves << [row, column]
-      row -= 1
-      column -= 1
+    until (row - i).negative? || (column - i).negative?
+      moves << [row - i, column - i]
+      i += 1
     end
 
     moves
@@ -119,11 +119,11 @@ class Queen < Piece
 
   def generate_negative_positive(row, column)
     moves = []
+    i = 1
 
-    until row.negative? || column >= 8
-      moves << [row, column]
-      row -= 1
-      column += 1
+    until (row - i).negative? || (column + i) > 7
+      moves << [row - i, column + i]
+      i += 1
     end
 
     moves
@@ -131,11 +131,11 @@ class Queen < Piece
 
   def generate_positive_negative(row, column)
     moves = []
+    i = 1
 
-    until row >= 8 || column.negative?
-      moves << [row, column]
-      row += 1
-      column -= 1
+    until (row + i) > 7 || (column - i).negative?
+      moves << [row + i, column - i]
+      i += 1
     end
 
     moves

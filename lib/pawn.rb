@@ -13,15 +13,16 @@ class Pawn < Piece
     moves = []
 
     moves << generate_vertical_positive(current_position[0], current_position[1])
+    moves
   end
 
   def generate_vertical_positive(row, column)
     moves = []
 
     moves << if name.include?('white')
-               [row, column - 1]
+               [row - 1, column]
              else
-               [row, column + 1]
+               [row + 1, column]
              end
 
     moves

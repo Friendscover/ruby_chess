@@ -20,24 +20,24 @@ class King < Piece
   end
 
   def generate_diagonal(row, column, moves)
-    moves <<  [row + 1, column + 1]
-    moves <<  [row - 1, column - 1]
-    moves <<  [row + 1, column - 1]
-    moves <<  [row - 1, column + 1]
+    moves <<  [row + 1, column + 1] unless row + 1 > 7 || column + 1 > 7
+    moves <<  [row - 1, column - 1] unless (row - 1).negative? || (column - 1).negative?
+    moves <<  [row + 1, column - 1] unless row + 1 > 7 || (column - 1).negative?
+    moves <<  [row - 1, column + 1] unless (row - 1).negative? || column + 1 > 7
 
     moves
   end
 
   def generate_horizontal(row, column, moves)
-    moves <<  [row + 1, column]
-    moves <<  [row - 1, column]
+    moves <<  [row + 1, column] unless row + 1 > 7
+    moves <<  [row - 1, column] unless (row - 1).negative?
 
     moves
   end
 
   def generate_vertical(row, column, moves)
-    moves <<  [row, column + 1]
-    moves <<  [row, column - 1]
+    moves <<  [row, column + 1] unless column + 1 > 7
+    moves <<  [row, column - 1] unless (column - 1).negative?
 
     moves
   end

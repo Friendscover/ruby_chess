@@ -27,7 +27,7 @@ class Game
     loop do
       @chess_board.print_board
       play_turn
-      break if check_mate
+      break if check?
 
       switch_current_player
     end
@@ -162,11 +162,11 @@ class Game
     loop do
       new_position = choose_position
       new_position = convert_user_input(new_position)
-
+      p position
       possible_moves = piece.generate_moves(position)
-
+      p "#Generated moves #{possible_moves}"
       possible_moves = remove_occupied_position(possible_moves) unless piece.is_a?(Knight) || piece.is_a?(King)
-
+      p "After removing #{possible_moves}"
       return new_position if possible_moves.include?(new_position)
     end
   end
@@ -189,7 +189,7 @@ class Game
     valid_moves
   end
 
-  def check_mate
+  def check?
     king_position = find_piece(King, current_player)
 
     # find positions of enemy pieces => needs to switch player
@@ -198,10 +198,11 @@ class Game
     # generation to later compare with king postion
     enemy_moves = generate_enemy_moves(enemy_positions)
 
+    # if king is under check, try if it is checkmate?
     enemy_moves.each do |move|
       if move.include?(king_position)
-        puts 'Check!'
-        return true
+        puts 'The King is under Check!'
+        check_mate?(king_position, enemy_moves)
       end
     end
     false
@@ -228,5 +229,14 @@ class Game
       valid_moves << move
     end
     valid_moves
+  end
+
+  def check_mate?(king_position, enemy_moves)
+    king = @chess_board.get_position(king_position[0], king_position[1])
+    king_moves = king.generate_moves(king_position)
+    p king_moves
+    p enemy_moves
+    moves_available = []
+    false
   end
 end
