@@ -162,11 +162,11 @@ class Game
     loop do
       new_position = choose_position
       new_position = convert_user_input(new_position)
-      p position
+      #p position
       possible_moves = piece.generate_moves(position)
-      p "#Generated moves #{possible_moves}"
+      #p "#Generated moves #{possible_moves}"
       possible_moves = remove_occupied_position(possible_moves) unless piece.is_a?(Knight) || piece.is_a?(King)
-      p "After removing #{possible_moves}"
+      #p "After removing #{possible_moves}"
       return new_position if possible_moves.include?(new_position)
     end
   end
@@ -190,8 +190,8 @@ class Game
   end
 
   def check?
-    king_position = find_piece(King, current_player)
-
+    king_position = find_piece(King, current_player).flatten(1)
+    p king_position
     # find positions of enemy pieces => needs to switch player
     enemy = current_player == 'black' ? 'white' : 'black'
     enemy_positions = find_piece(Piece, enemy)
@@ -200,9 +200,10 @@ class Game
 
     # if king is under check, try if it is checkmate?
     enemy_moves.each do |move|
+      p move
       if move.include?(king_position)
-        puts 'The King is under Check!'
-        check_mate?(king_position, enemy_moves)
+        puts "The King is under Check! with #{move}"
+        return check_mate?(king_position, enemy_moves)
       end
     end
     false
@@ -234,9 +235,14 @@ class Game
   def check_mate?(king_position, enemy_moves)
     king = @chess_board.get_position(king_position[0], king_position[1])
     king_moves = king.generate_moves(king_position)
-    p king_moves
-    p enemy_moves
+
+    enemy_moves.flatten!(1)
     moves_available = []
-    false
+
+    king_moves.each do |move|
+      moves_available << move unless enemy_moves.include?(move)
+    end
+    p moves_available
+    moves_available.empty?
   end
 end
