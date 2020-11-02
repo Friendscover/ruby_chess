@@ -1,17 +1,3 @@
-# 8x8 board game = 64
-# 16 pieces on board white and black
-#=> 1 king, 1 queen, 2 rooks, 2 knights, 2 bishops, 8 pawns
-# game over if checkmate => king has no moves that not gonna kick him out
-# random if black or white => white moves first
-# if piece is moved => occupied => remove enemy piece, else set piece
-# moves:
-# king => one square in any direction
-# rook => any number of squares along rank or file, cannot leap over pieces
-# bishop => moves diagonal, not over other pieces
-# queen => rook + bishop, not over other pieces
-# knight => 2,1 in any direction, only pieces that can leap over others
-# pawn => move one or two pos => two only on first move => can capture opponent
-#     if enemy pawn is in front of it one position left or right
 class Game
   attr_accessor :current_player, :player1, :player2
 
@@ -31,7 +17,6 @@ class Game
 
       switch_current_player
     end
-    # check if won/check/checkamto/pawn switch
   end
 
   def create_start_position
@@ -129,7 +114,7 @@ class Game
     alphabet_to_array = %w[a b c d e f g h]
     number_array = [7, 6, 5, 4, 3, 2, 1, 0]
     input = input.split(//)
-    p input
+
     column = alphabet_to_array.index(input[0])
     row = number_array.index(input[1].to_i - 1)
     [row, column]
@@ -162,11 +147,11 @@ class Game
     loop do
       new_position = choose_position
       new_position = convert_user_input(new_position)
-      #p position
+
       possible_moves = piece.generate_moves(position)
-      #p "#Generated moves #{possible_moves}"
+
       possible_moves = remove_occupied_position(possible_moves) unless piece.is_a?(Knight) || piece.is_a?(King)
-      #p "After removing #{possible_moves}"
+
       return new_position if possible_moves.include?(new_position)
     end
   end
@@ -178,11 +163,11 @@ class Game
       next if row.empty?
 
       i = 0
-      temp = ' '
+      position = ' '
 
-      until temp != ' ' || i >= row.length
+      until position != ' ' || i >= row.length
         valid_moves << row[i]
-        temp = @chess_board.get_position(row[i][0], row[i][1])
+        position = @chess_board.get_position(row[i][0], row[i][1])
         i += 1
       end
     end
@@ -191,18 +176,16 @@ class Game
 
   def check?
     king_position = find_piece(King, current_player).flatten(1)
-    p king_position
     # find positions of enemy pieces => needs to switch player
     enemy = current_player == 'black' ? 'white' : 'black'
     enemy_positions = find_piece(Piece, enemy)
-    # generation to later compare with king postion
+    # generation to later compare with king position
     enemy_moves = generate_enemy_moves(enemy_positions)
 
     # if king is under check, try if it is checkmate?
     enemy_moves.each do |move|
-      p move
       if move.include?(king_position)
-        puts "The King is under Check! with #{move}"
+        puts 'The King is under Check!'
         return check_mate?(king_position, enemy_moves)
       end
     end
@@ -235,14 +218,15 @@ class Game
   def check_mate?(king_position, enemy_moves)
     king = @chess_board.get_position(king_position[0], king_position[1])
     king_moves = king.generate_moves(king_position)
-
+    # the piece generation is build to generate moves for each direction to
+    # delete moves that follow if the position is blocked. Since thats
+    # irrelevant in this method, just flatten it for easy traversing
     enemy_moves.flatten!(1)
     moves_available = []
 
     king_moves.each do |move|
       moves_available << move unless enemy_moves.include?(move)
     end
-    p moves_available
     moves_available.empty?
   end
 end
