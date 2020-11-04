@@ -3,6 +3,10 @@ class Game
 
   def initialize
     @chess_board = Board.new
+    start_game
+  end
+
+  def start_game
     assign_players
     create_start_position
     set_start_position
@@ -17,6 +21,8 @@ class Game
 
       switch_current_player
     end
+    
+    display_game_over
   end
 
   def create_start_position
@@ -37,7 +43,9 @@ class Game
   end
 
   def generate_back_row(color)
-    [Rook.new(color), Knight.new(color), Bishop.new(color), Queen.new(color), King.new(color), Bishop.new(color), Knight.new(color), Rook.new(color)]
+    left = [Rook.new(color), Knight.new(color), Bishop.new(color), Queen.new(color)]
+    right = [King.new(color), Bishop.new(color), Knight.new(color), Rook.new(color)]
+    left.concat(right)
   end
 
   def generate_front_row(color)
@@ -49,9 +57,8 @@ class Game
   end
 
   def assign_players
-    user_input = choose_player
-    assign_starting_player(user_input)
-    start_player_message
+    assign_starting_player(choose_player)
+    display_player_selection
   end
 
   def choose_player
@@ -76,20 +83,30 @@ class Game
     end
   end
 
-  def start_player_message
+  def display_player_selection
     puts "Player1 chooses #{@player1}. Player2 chooses #{player2}!"
     puts "The Game starts with #{@current_player} \n \n"
   end
 
+  def display_help_message
+    puts 'To pick a position on the board type the row <a-h> and column <1-8>!'
+    puts 'For example. Type <a1> to choose the piece on this position!'
+  end
+
+  def display_game_over
+    puts 'The Game is finally over!'
+    puts "The Winner is #{current_player}!"
+    puts 'Thanks for playing. This was a long project, hope you enjoyed it.'
+    puts 'Are you down for a another turn? Consider starting the game again!'
+  end
+
   def play_turn
     puts "\n \n#{@current_player}. Choose a Piece to move! Type <help> for more info"
-    user_input = choose_position
-    user_input = convert_user_input(user_input)
+    user_input = convert_user_input(choose_position)
 
     until valid_piece_selected?(user_input)
       puts 'Thats no a valid piece. Try again'
-      user_input = choose_position
-      user_input = convert_user_input(user_input)
+      user_input = convert_user_input(choose_position)
     end
     assign_new_position(user_input)
   end
@@ -99,8 +116,7 @@ class Game
 
     until user_input.match(/[a-h][1-8]/) && user_input.length == 2
       if user_input == 'help'
-        puts 'To pick a position on the board type the row <a-h> and column <1-8>!'
-        puts 'For example. Type <a1> to choose the piece on this position!'
+        display_help_message
       else
         puts 'Thats not quit right. Try again. Type <help> for more info!'
       end
@@ -121,14 +137,14 @@ class Game
   end
 
   def valid_piece_selected?(position)
-    piece = @chess_board.board[position[0]][position[1]]
+    piece = @chess_board.get_position(position[0], position[1])
     # does not raise error for string.name if piece is not a piece
     # does not check the second half of the condition if first half is false
     piece != ' ' && piece.name == current_player
   end
 
   def assign_new_position(current_position)
-    current_piece = @chess_board.board[current_position[0]][current_position[1]]
+    current_piece = @chess_board.get_position(current_position[0], current_position[1])
 
     puts 'Please choose a new Position for your Piece!'
     puts "Selected Piece: #{current_piece.icon} \n"
@@ -145,8 +161,7 @@ class Game
 
   def check_new_position(piece, position)
     loop do
-      new_position = choose_position
-      new_position = convert_user_input(new_position)
+      new_position = convert_user_input(choose_position)
 
       possible_moves = piece.generate_moves(position)
 
@@ -184,10 +199,7 @@ class Game
 
     # if king is under check, try if it is checkmate?
     enemy_moves.each do |move|
-      if move.include?(king_position)
-        puts 'The King is under Check!'
-        return check_mate?(king_position, enemy_moves)
-      end
+      return check_mate?(king_position, enemy_moves) if move.include?(king_position)
     end
     false
   end
@@ -216,6 +228,7 @@ class Game
   end
 
   def check_mate?(king_position, enemy_moves)
+    puts 'The King is under Check!'
     king = @chess_board.get_position(king_position[0], king_position[1])
     king_moves = king.generate_moves(king_position)
     # the piece generation is build to generate moves for each direction to
