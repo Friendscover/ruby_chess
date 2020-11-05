@@ -1,4 +1,4 @@
-require 'piece'
+require_relative 'piece'
 
 class King < Piece
   def initialize(name)

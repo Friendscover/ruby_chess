@@ -7,6 +7,6 @@ At the moment this game is only playable with two players.
 Chess is playable in the console. To start run the game via 
 
 ```
-ruby lib/game.rb
+ruby lib/main.rb
 ```
 Enjoy!

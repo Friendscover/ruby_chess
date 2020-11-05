@@ -1,3 +1,11 @@
+require_relative "bishop"
+require_relative "board"
+require_relative "king"
+require_relative "knight"
+require_relative "pawn"
+require_relative "queen"
+require_relative "rook"
+
 class Game
   attr_accessor :current_player, :player1, :player2
 
@@ -7,10 +15,8 @@ class Game
   end
 
   def start_game
-    assign_players
     create_start_position
     set_start_position
-    play_game
   end
 
   def play_game
@@ -21,7 +27,7 @@ class Game
 
       switch_current_player
     end
-    
+
     display_game_over
   end
 
