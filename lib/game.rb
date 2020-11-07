@@ -1,17 +1,24 @@
-require_relative "bishop"
-require_relative "board"
-require_relative "king"
-require_relative "knight"
-require_relative "pawn"
-require_relative "queen"
-require_relative "rook"
+require_relative 'bishop'
+require_relative 'board'
+require_relative 'king'
+require_relative 'knight'
+require_relative 'pawn'
+require_relative 'queen'
+require_relative 'rook'
+require 'json'
 
 class Game
   attr_accessor :current_player, :player1, :player2
 
   def initialize
     @chess_board = Board.new
-    start_game
+
+    if File.exist?('save.json')
+      load_game
+    else
+      start_game
+      assign_players
+    end
   end
 
   def start_game
@@ -26,6 +33,7 @@ class Game
       break if check?
 
       switch_current_player
+      save_game
     end
 
     display_game_over
@@ -247,5 +255,30 @@ class Game
       moves_available << move unless enemy_moves.include?(move)
     end
     moves_available.empty?
+  end
+
+  def save_game
+    save = File.open('save.json', 'w')
+
+    save.puts JSON.dump({
+                          chess_board: @chess_board.board,
+                          current_player: @current_player,
+                          player1: @player1,
+                          player2: @player2
+                        })
+
+    save.close
+  end
+
+  def load_game
+    save = File.open('save.json', 'r')
+
+    data = JSON.load(save.read)
+    @chess_board.board = data['chess_board']
+    @current_player = data['current_player']
+    @player1 = data['player1']
+    @player2 = data['player2']
+
+    save.close
   end
 end
