@@ -28,6 +28,7 @@ class Game
 
   def play_game
     loop do
+      puts `clear`
       @chess_board.print_board
       play_turn
       break if check?
@@ -105,6 +106,7 @@ class Game
   def display_help_message
     puts 'To pick a position on the board type the row <a-h> and column <1-8>!'
     puts 'For example. Type <a1> to choose the piece on this position!'
+    puts 'If you wanna exit the game, type <exit>! Your progress will be saved.'
   end
 
   def display_game_over
@@ -114,12 +116,16 @@ class Game
     puts 'Are you down for a another turn? Consider starting the game again!'
   end
 
-  def play_turn
+  def display_turn_message
     puts "\n \n#{@current_player}. Choose a Piece to move! Type <help> for more info"
+  end
+
+  def play_turn
+    display_turn_message
     user_input = convert_user_input(choose_position)
 
     until valid_piece_selected?(user_input)
-      puts 'Thats no a valid piece. Try again'
+      puts "Thats no a valid piece. Try again \n"
       user_input = convert_user_input(choose_position)
     end
     assign_new_position(user_input)
@@ -129,8 +135,11 @@ class Game
     user_input = gets.chomp
 
     until user_input.match(/[a-h][1-8]/) && user_input.length == 2
-      if user_input == 'help'
+      case user_input
+      when 'help'
         display_help_message
+      when 'exit'
+        exit
       else
         puts 'Thats not quit right. Try again. Type <help> for more info!'
       end
@@ -160,7 +169,7 @@ class Game
   def assign_new_position(current_position)
     current_piece = @chess_board.get_position(current_position[0], current_position[1])
 
-    puts 'Please choose a new Position for your Piece!'
+    puts "\nPlease choose a new Position for your Piece!"
     puts "Selected Piece: #{current_piece.icon} \n"
 
     new_position = check_new_position(current_piece, current_position)
